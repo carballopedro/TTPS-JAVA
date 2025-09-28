@@ -1,0 +1,68 @@
+/* Reset básico */
+* { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+
+/* Fondo cálido y centrado vertical/horizontal */
+body{
+    background:#fff3e0;
+    min-height:100vh;
+    display:flex;                 /* centra el contenido */
+    flex-direction:column;        /* título arriba, formulario abajo */
+    align-items:center;           /* centra horizontalmente */
+    justify-content:center;       /* centra verticalmente */
+    gap:24px;                     /* espacio entre título y form */
+    color:#333;
+}
+
+/* Título */
+h1{
+    color:#bf360c;
+    font-size:42px;               /* bajá si te quedó muy grande */
+    text-align:center;
+}
+
+/* “Tarjeta” del formulario */
+form{
+    width: 420px;                 /* ancho fijo razonable */
+    background:#fff;
+    padding:28px;
+    border-radius:14px;
+    box-shadow:0 12px 24px rgba(0,0,0,.12);
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+}
+
+/* labels e inputs */
+label{ font-weight:700; }
+input[type="text"], input[type="password"]{
+    padding:10px;
+    border:1px solid #ccc;
+    border-radius:8px;
+    font-size:14px;
+}
+
+/* botón */
+input[type="submit"],
+input[type="button"]{
+    margin-top:8px;
+    padding:12px;
+    background:#ff7043;
+    color:#fff;
+    border:none;
+    border-radius:10px;
+    font-weight:700;
+    cursor:pointer;
+    transition:filter .2s ease;
+}
+/* Link rojo debajo del submit, centrado y en bloque */
+a.link-cupon{
+    display:block;
+    margin-top:12px;
+    text-align:center;
+    color:#bf360c;          /* rojo del título */
+    font-weight:700;
+    text-decoration:none;
+}
+a.link-cupon:hover{ text-decoration:underline; }
+
+input[type="submit"], input[type="button"]:hover{ filter:brightness(.95); }

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
+         version="6.0">
+
+    <welcome-file-list>
+        <welcome-file>login.html</welcome-file>
+    </welcome-file-list>
+
+
+    <!-- Parámetros de contexto -->
+    <context-param>
+        <param-name>nombreSitio</param-name>
+        <param-value>Clasificados UNLP</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>emailContacto</param-name>
+        <param-value>contacto@clasificados.unlp.edu.ar</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>telefonoContacto</param-name>
+        <param-value>221-123-4567</param-value>
+    </context-param>
+
+    <!-- Listener que carga los parámetros y crea SitioClasificado -->
+    <listener>
+        <listener-class>com.example.clasificados.LectorDeParametros</listener-class>
+    </listener>
+
+</web-app>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Festival Capital – Cupón de Remera</title>
+
+    <link rel="stylesheet" href="css/estilos.css">
+
+
+</head>
+<body>
+
+<h1>Promo TTPS – Cupón de Remera</h1>
+
+<form action="ImprimeCupon" method="get" accept-charset="UTF-8" target="_blank">
+    <label for="texto">Texto personalizado</label>
+    <input
+            type="text"
+            id="texto"
+            name="texto"
+            maxlength="6"
+            placeholder="Ej.: Pedro (Máximo 6 caracteres)"
+            required
+    />
+    <input type="submit" value="Generar cupón" />
+    <input type="button" value="Limpiar" onclick="this.form.reset()" />
+</form>
+
+</body>
+</html>

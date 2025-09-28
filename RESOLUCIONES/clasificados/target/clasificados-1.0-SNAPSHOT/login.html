@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{{titulo}}</title>
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+<h1>{{titulo}}</h1>
+
+<form action="ServletLogin" method="post" style="width:420px;background:#fff;padding:28px;border-radius:14px;box-shadow:0 12px 24px rgba(0,0,0,.12);display:flex;flex-direction:column;gap:14px;">
+    <label for="usuario">{{labelusuario}}:</label>
+    <input type="text" id="usuario" name="usuario" required>
+
+    <label for="clave">{{labelpassword}}:</label>
+    <input type="password" id="clave" name="clave" required>
+
+    <input type="submit" value="{{labellogin}}">
+
+    <!-- Link de texto rojo, centrado, DENTRO del form -->
+    <a href="/clasificados/index.html" style="display:block;margin-top:10px;text-align:center;color:#bf360c;font-weight:700;text-decoration:none;">
+        {{labelcoupon}}
+    </a>
+
+    <!-- Cambio de idioma -->
+    <div style="text-align:center; margin-top:10px;">
+        <a href="?lang=es" style="color:#bf360c;font-weight:700;text-decoration:none; margin-right:8px;">
+            ES
+        </a>
+        <a href="?lang=en" style="color:#bf360c;font-weight:700;text-decoration:none;">
+            EN
+        </a>
+    </div>
+</form>
+</body>
+</html>
