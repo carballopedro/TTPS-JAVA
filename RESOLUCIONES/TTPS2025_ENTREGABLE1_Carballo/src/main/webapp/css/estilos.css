@@ -1,0 +1,68 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #fff3e0;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* formulario */
+form {
+    background: #ffffff;
+    padding: 0.8rem 1.5rem;
+    border-radius: 0.8rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 430px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+/* etiquetas */
+label {
+    font-weight: bold;
+    color: #5d4037;
+    font-size: 0.82rem;
+    margin-bottom: 0.05rem;
+}
+
+/* inputs y select */
+input, select {
+    padding: 0.3rem 0.4rem; /* menos alto */
+    border: 1px solid #ccc;
+    border-radius: 0.35rem;
+    font-size: 0.85rem;
+    width: 100%;
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: #ff7043;
+    box-shadow: 0 0 0 1px rgba(255, 112, 67, 0.2);
+}
+
+/* botón */
+button {
+    background: #ff7043;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 0.4rem;
+    padding: 0.4rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 0.4rem;
+}
+
+button:hover {
+    background: #f4511e;
+}
