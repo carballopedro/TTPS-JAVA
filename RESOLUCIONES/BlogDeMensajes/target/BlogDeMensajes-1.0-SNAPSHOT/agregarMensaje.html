@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <title>Agregar mensaje</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+<div class="card">
+    <header>
+        <div class="title">Nuevo mensaje</div>
+    </header>
+
+    <!-- Cartel de error (se completa por JS si viene ?error=...) -->
+    <div id="flash" style="display:none;background:#ffebee;color:#c62828;
+       padding:.5rem .8rem;margin:.6rem 1.2rem 0;border-radius:.4rem;"></div>
+
+    <form method="post" action="GuardarMensaje" accept-charset="UTF-8">
+        <div class="field">
+            <label for="username">Usuario</label>
+            <input id="username" name="username" type="text" maxlength="50" required
+                   autocomplete="username" placeholder="tu-usuario" />
+            <div class="hint">Debe existir en <code>users.username</code>.</div>
+        </div>
+
+        <div class="field">
+            <label for="texto">Mensaje</label>
+            <textarea id="texto" name="texto" rows="4" maxlength="500" required
+                      placeholder="Escribí tu mensaje…"></textarea>
+            <div class="row-between">
+                <span class="hint">Máx. 500 caracteres</span>
+                <span class="hint" id="contador">0 / 500</span>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button type="submit">Publicar</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    // contador
+    const ta = document.getElementById('texto');
+    const cnt = document.getElementById('contador');
+    const upd = () => cnt.textContent = `${ta.value.length} / 500`;
+    ta.addEventListener('input', upd); upd();
+
+    // leer query params (?error=...&username=...&texto=...)
+    const params = new URLSearchParams(location.search);
+    const flash = document.getElementById('flash');
+
+    const error = params.get('error');
+    const username = params.get('username');
+    const texto = params.get('texto');
+
+    if (error) { flash.textContent = error; flash.style.display = 'block'; }
+    if (username) document.getElementById('username').value = username;
+    if (texto)    { document.getElementById('texto').value = texto; upd(); }
+
+    // opcional: limpiar la URL después de mostrar el mensaje/valores
+    if (error || username || texto) {
+        history.replaceState(null, "", "agregarMensaje.html");
+    }
+</script>
+</body>
+</html>

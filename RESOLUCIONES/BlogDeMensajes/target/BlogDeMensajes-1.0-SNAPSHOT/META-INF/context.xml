@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context debug="5" reloadable="true" crossContext="true">
+    <Resource name="jdbc/blog" auth="Container" type="javax.sql.DataSource"
+              maxIdle="30" maxWait="10000"
+              username="root" password="password"
+              driverClassName="com.mysql.jdbc.Driver"
+              url="jdbc:mysql://localhost:3306/blog?autoReconnect=true"/>
+</Context>
