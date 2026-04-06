@@ -17,7 +17,7 @@ interface NominatimResponse {
     state?: string;
     county?: string;
   };
-}
+} 
 
 // Estructura de datos con la ubicación que uso en el resto de la app
 export interface LocationInfo {
