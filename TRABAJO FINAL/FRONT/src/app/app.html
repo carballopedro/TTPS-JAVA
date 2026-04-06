@@ -1,0 +1,8 @@
+<!-- Plantilla raíz: renderiza header/footer y el componente activo del router. -->
+<app-header *ngIf="mostrarHeader"></app-header>
+
+<div class="main-container">
+  <router-outlet></router-outlet>
+</div>
+
+<app-footer *ngIf="mostrarFooter"></app-footer>

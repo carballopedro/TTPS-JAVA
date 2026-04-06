@@ -1,0 +1,60 @@
+:host {
+  display: block;
+  padding: 16px 32px 24px;
+  box-sizing: border-box;
+}
+
+.main-footer {
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.footer-card {
+  max-width: 1420px;
+  margin: 0 auto;
+  background: #fdfdfb;
+  border-radius: 22px;
+  padding: 26px 48px 18px;
+  box-shadow: 0 22px 55px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+
+.footer-copy {
+  margin: 0;
+  font-size: 15px;
+  color: #7f8387;
+  font-weight: 400;
+}
+
+.footer-nav {
+  display: flex;
+  gap: 24px;
+  font-size: 15px;
+}
+
+.footer-nav a {
+  text-decoration: none;
+  color: #868a8f;
+  padding: 6px 0;
+  border-bottom: none;
+  transition: none;
+  font-weight: 400;
+}
+
+.footer-nav a:hover,
+.footer-nav a:focus,
+.footer-nav a.active {
+  color: #868a8f;
+}
+
+@media (max-width: 640px) {
+  .footer-card {
+    max-width: 100%;
+    padding: 24px 24px 16px;
+  }
+}

@@ -1,0 +1,53 @@
+<section class="mis-publicaciones" *ngIf="user(); else noUser">
+  <h1>Mis publicaciones</h1>
+  <p *ngIf="isLoading()">Cargando publicaciones…</p>
+  <ng-container *ngIf="!isLoading()">
+    <div class="empty-state" *ngIf="!hasPublications()">
+      <h2>Sin publicaciones todavía</h2>
+      <p>Compartí reportes de mascotas perdidas y ayudá a tu comunidad.</p>
+      <button type="button" (click)="createPublication()">Crear una publicación</button>
+    </div>
+    <div *ngIf="hasPublications()" class="cards-grid">
+      <article class="pet-card" *ngFor="let pub of items()">
+        <div class="pet-media">
+          <img
+            [src]="pub.mascota?.fotoUrl || defaultImage"
+            [alt]="'Imagen de ' + (pub.mascota?.nombre ?? 'la publicación')"
+          >
+        </div>
+        <div class="pet-info">
+          <h3>{{ pub.mascota?.nombre ?? 'Publicación #' + pub.id }}</h3>
+          <div class="pet-badges">
+            <span class="pill pill-status">{{ formatPetStatus(pub.mascota?.estado) }}</span>
+            <span class="pill">{{ capitalize(pub.mascota?.tipo) }}</span>
+          </div>
+          <p class="pet-desc">{{ pub.descripcion }}</p>
+          <div class="meta-grid">
+            <div class="meta-card">
+              <span class="meta-label">Ciudad</span>
+              <strong>{{ pub.ciudad || 'Sin datos' }}</strong>
+            </div>
+            <div class="meta-card">
+              <span class="meta-label">Barrio</span>
+              <strong>{{ pub.barrio || 'Sin datos' }}</strong>
+            </div>
+            <div class="meta-card full">
+              <span class="meta-label">Fecha</span>
+              <strong>{{ formatDate(pub.fecha) }}</strong>
+            </div>
+          </div>
+          <div class="pet-actions">
+            <button type="button" (click)="viewDetails(pub)">Ver detalles</button>
+          </div>
+        </div>
+      </article>
+    </div>
+  </ng-container>
+</section>
+
+<ng-template #noUser>
+  <section class="mis-publicaciones">
+    <h1>Mis publicaciones</h1>
+    <p>No encontramos datos del usuario. Iniciá sesión nuevamente.</p>
+  </section>
+</ng-template>

@@ -1,0 +1,194 @@
+<section class="profile-wrapper" *ngIf="user() as profile; else emptyState">
+  <form class="profile-card" [formGroup]="profileForm" (ngSubmit)="saveProfile()" novalidate>
+    <header class="profile-header">
+      <div class="avatar" aria-hidden="true">{{ profile.nombre[0] }}</div>
+      <div class="header-info">
+        <p class="eyebrow">Mi perfil</p>
+        <div class="name-row">
+          <h1>{{ profile.nombre }} {{ profile.apellido }}</h1>
+          <div class="status-pill" [class.enabled]="profile.habilitado">
+            {{ profile.habilitado ? 'Perfil habilitado' : 'Perfil pendiente de revisión' }}
+          </div>
+        </div>
+        <!-- <p class="lead">{{ profile.descripcion || 'Contá brevemente quién sos dentro de la comunidad.' }}</p> -->
+      </div>
+      <div class="header-actions">
+        <button *ngIf="!isEditing" type="button" (click)="enableEditing()">Editar perfil</button>
+        <ng-container *ngIf="isEditing">
+          <button type="button" class="ghost" (click)="cancelEditing()">Cancelar</button>
+          <button type="submit" [disabled]="isSaving">{{ isSaving ? 'Guardando…' : 'Guardar cambios' }}</button>
+        </ng-container>
+      </div>
+    </header>
+
+    <p class="error-banner" *ngIf="saveError">{{ saveError }}</p>
+
+    <div class="profile-grid" *ngIf="!isEditing">
+      <section class="info-card">
+        <h2>Contacto</h2>
+        <dl class="profile-data-grid">
+          <div class="profile-data-card">
+            <dt>Email</dt>
+            <dd>{{ profile.email }}</dd>
+          </div>
+          <div class="profile-data-card">
+            <dt>Teléfono</dt>
+            <dd>{{ profile.telefono || 'Sin registrar' }}</dd>
+          </div>
+          <div class="profile-data-card">
+            <dt>Instagram</dt>
+            <dd>{{ profile.instagram || 'Sin registrar' }}</dd>
+          </div>
+          <div class="profile-data-card">
+            <dt>Sitio web</dt>
+            <dd>{{ profile.sitioWeb || 'Sin registrar' }}</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section class="info-card">
+        <h2>Ubicación</h2>
+        <dl class="profile-data-grid profile-data-grid--two">
+          <div class="profile-data-card">
+            <dt>Ciudad</dt>
+            <dd>{{ profile.ciudad || 'Sin registrar' }}</dd>
+          </div>
+          <div class="profile-data-card">
+            <dt>Barrio</dt>
+            <dd>{{ profile.barrio || 'Sin registrar' }}</dd>
+          </div>
+        </dl>
+        <div
+          class="profile-map-wrapper"
+          *ngIf="profile.latitud != null && profile.longitud != null; else noLocation"
+        >
+          <div class="profile-map" #profileViewMap aria-label="Mapa con la ubicación del usuario"></div>
+        </div>
+        <ng-template #noLocation>
+          <p class="hint small">Sin ubicación registrada.</p>
+        </ng-template>
+      </section>
+
+      <section class="info-card">
+        <h2>Actividad</h2>
+        <div class="profile-data-grid profile-data-grid--single">
+          <div class="profile-data-card activity-card">
+            <p class="metric">Puntos solidarios</p>
+            <strong class="score">{{ profile.puntos ?? 0 }}</strong>
+          </div>
+          <div class="profile-data-card badges-card">
+            <p class="metric">Insignia</p>
+            <div class="user-badges" *ngIf="(profile.badges?.length ?? 0) > 0; else noUserBadges">
+              <span class="badge-pill" *ngFor="let badge of profile.badges">{{ formatBadgeLabel(badge) }}</span>
+            </div>
+            <ng-template #noUserBadges>
+              <div class="user-badges">
+                <span class="badge-pill muted">Sin insignias</span>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="profile-grid edit-grid" *ngIf="isEditing && user() as profile">
+      <section class="info-card form-card">
+        <h2>Datos personales</h2>
+        <div class="form-grid">
+          <label class="form-control">
+            <span>Nombre</span>
+            <input type="text" formControlName="nombre" placeholder="Nombre">
+          </label>
+          <label class="form-control">
+            <span>Apellido</span>
+            <input type="text" formControlName="apellido" placeholder="Apellido">
+          </label>
+          <label class="form-control full">
+            <span>Email</span>
+            <div class="input-wrapper has-right-icon">
+              <input type="email" formControlName="email" placeholder="correo@ejemplo.com">
+              <span class="input-icon icon-right" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="2" y="4" width="20" height="16" rx="2" ry="2"/>
+                  <polyline points="22,6 12,13 2,6"/>
+                </svg>
+              </span>
+            </div>
+          </label>
+          <label class="form-control full">
+            <span>Contraseña</span>
+            <div class="input-wrapper has-action">
+              <input
+                [type]="isPasswordVisible ? 'text' : 'password'"
+                formControlName="password"
+                placeholder="Ingresá una nueva contraseña (opcional)"
+              >
+              <button
+                type="button"
+                class="input-action"
+                [attr.aria-pressed]="isPasswordVisible"
+                [attr.aria-label]="isPasswordVisible ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+                (click)="togglePasswordVisibility()"
+              >
+                <ng-container *ngIf="isPasswordVisible; else showPasswordIcon">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.77 21.77 0 0 1 5.06-6.94"/>
+                    <path d="M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a21.82 21.82 0 0 1-2.11 3.95"/>
+                    <line x1="1" y1="1" x2="23" y2="23"/>
+                  </svg>
+                </ng-container>
+                <ng-template #showPasswordIcon>
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                  </svg>
+                </ng-template>
+              </button>
+            </div>
+          </label>
+          <label class="form-control full">
+            <span>Teléfono</span>
+            <input type="tel" formControlName="telefono" placeholder="Ej: 2211234567">
+          </label>
+          <label class="form-control">
+            <span>Instagram (Opcional)</span>
+            <input type="text" formControlName="instagram" placeholder="@usuario">
+          </label>
+          <label class="form-control">
+            <span>Sitio web (Opcional)</span>
+            <input type="url" formControlName="sitioWeb" placeholder="https://mipagina.com">
+          </label>
+        </div>
+      </section>
+
+      <section class="info-card form-card map-card">
+        <p class="map-eyebrow">Elegí tu ubicación</p>
+        <h2>Completá barrio y ciudad desde el mapa</h2>
+        <p class="map-hint">Hacé clic en el mapa para fijar el punto y autocompletar los campos.</p>
+        <div class="map-container" #profileMap aria-label="Mapa para seleccionar barrio y ciudad"></div>
+        <p class="map-status error" *ngIf="geoError">{{ geoError }}</p>
+        <div class="form-grid">
+          <label class="form-control readonly-field">
+            <span>Ciudad</span>
+            <input type="text" formControlName="ciudad" readonly>
+          </label>
+          <label class="form-control readonly-field">
+            <span>Barrio</span>
+            <input type="text" formControlName="barrio" readonly>
+          </label>
+        </div>
+      </section>
+
+
+    </div>
+  </form>
+</section>
+
+<ng-template #emptyState>
+  <section class="profile-wrapper">
+    <article class="profile-card empty-card">
+      <p>No pudimos cargar tu perfil en este momento.</p>
+      <small>Iniciá sesión nuevamente o intentá más tarde.</small>
+    </article>
+  </section>
+</ng-template>

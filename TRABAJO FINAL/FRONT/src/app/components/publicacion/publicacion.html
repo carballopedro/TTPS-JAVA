@@ -1,0 +1,102 @@
+<section class="publication-page">
+  <div class="publication-card">
+    <div class="publication-copy">
+      <p class="eyebrow">Nueva publicación</p>
+      <h1>Contanos sobre la mascota</h1>
+      <p>Completá los datos para que la comunidad pueda ayudarte más rápido.</p>
+    </div>
+
+    <form #publicationFormElement class="publication-form" [formGroup]="publicationForm" (ngSubmit)="onSubmit()">
+      <div class="field-pair">
+        <label>
+          Fecha
+          <input type="date" formControlName="date" required [max]="today">
+        </label>
+      </div>
+
+      <label>
+        Descripción
+        <textarea placeholder="Descripción de la situación" rows="4" formControlName="description" required></textarea>
+      </label>
+
+      <div class="map-section">
+        <p class="map-instructions">Elegí el barrio aproximado haciendo clic en el mapa.</p>
+        <div id="publication-map" class="publication-map" aria-label="Mapa para seleccionar barrio"></div>
+        <p class="map-hint">Hacé clic en el mapa para completar el barrio.</p>
+        <p *ngIf="geoError" class="map-error" role="alert">{{ geoError }}</p>
+      </div>
+
+      <div class="field-pair">
+        <label>
+          Ciudad
+          <input type="text" formControlName="city" placeholder="Ciudad" readonly required>
+        </label>
+        <label>
+          Barrio
+          <input type="text" formControlName="neighborhood" placeholder="Barrio" readonly required>
+        </label>
+      </div>
+
+      <label class="upload-field">
+        Foto de la mascota
+        <div class="file-input">
+          <input type="file" accept="image/*" (change)="onPhotoSelected($event)" required>
+          <span>{{ photoName || 'Elegir archivo' }}</span>
+        </div>
+      </label>
+
+      <div class="field-grid">
+        <label>
+          Color
+          <input type="text" placeholder="Color de la mascota" formControlName="color" required>
+        </label>
+        <label>
+          Tamaño
+          <select formControlName="size" required>
+            <option value="" disabled>Tamaño</option>
+            <option *ngFor="let size of petSizes" [value]="size">{{ formatLabel(size) | titlecase }}</option>
+          </select>
+        </label>
+        <label>
+          Tipo
+          <select formControlName="type" required>
+            <option value="" disabled>Tipo de mascota</option>
+            <option *ngFor="let type of petTypes" [value]="type">{{ formatLabel(type) | titlecase }}</option>
+          </select>
+        </label>
+        <label>
+          Raza
+          <select formControlName="breed" required [attr.disabled]="isBreedEnabled ? null : true">
+            <option value="" disabled>Raza</option>
+            <option *ngFor="let breed of breedOptions" [value]="breed">{{ formatLabel(breed) | titlecase }}</option>
+          </select>
+        </label>
+        <label>
+          Estado
+          <select formControlName="status" required>
+            <option value="" disabled>Estado</option>
+            <option *ngFor="let status of petStatuses" [value]="status">{{ formatLabel(status) | titlecase }}</option>
+          </select>
+        </label>
+        <label>
+          Nombre de la mascota (opcional)
+          <input type="text" placeholder="Nombre de la mascota" formControlName="petName">
+        </label>
+      </div>
+
+      <button type="submit">Crear publicación</button>
+    </form>
+  </div>
+
+</section>
+
+<!-- Overlay de confirmación posterior a crear la publicación -->
+<div class="delete-overlay" *ngIf="successPromptVisible">
+  <div class="delete-dialog">
+    <h2>Publicación creada</h2>
+    <p>{{ successMessage }}</p>
+    <div class="delete-actions">
+      <button type="button" class="primary" (click)="confirmSuccess()">OK</button>
+    </div>
+  </div>
+</div>

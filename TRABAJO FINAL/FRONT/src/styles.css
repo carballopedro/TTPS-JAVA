@@ -1,0 +1,23 @@
+@import 'leaflet/dist/leaflet.css';
+
+/* Global resets */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: "Roboto", Arial, Helvetica, sans-serif;
+  background: linear-gradient(180deg, #86c1a5 0%, #b5dfc9 55%, #e1f2e8 100%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+  color: #121212;
+}

@@ -1,0 +1,154 @@
+<section class="home-wrapper">
+  <div class="hero-card">
+    <div class="hero-copy">
+      <p class="eyebrow">Encontrá y compartí</p>
+      <h1>Unite para reunir mascotas con sus familias</h1>
+      <p>
+        Somos una comunidad que centraliza reportes de mascotas perdidas.
+        Publicá, compartí y recibí alertas personalizadas en tu zona para acelerar los reencuentros.
+      </p>
+      <div class="hero-actions">
+        <button type="button" (click)="onCreatePublication()">Crear una publicación</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="focus-cards">
+    <article class="highlight-card recent-card">
+      <div class="recent-header">
+        <div>
+          <h2>Mascotas perdidas recientemente</h2>
+          <p>Explorá los reportes recientes y ayudá a compartirlos en tu barrio.</p>
+        </div>
+      </div>
+      <div class="recent-state" *ngIf="recentLoading()">Cargando publicaciones…</div>
+      <div class="recent-state error" *ngIf="!recentLoading() && recentError()">{{ recentError() }}</div>
+      <ng-container *ngIf="!recentLoading() && !recentError()">
+        <div class="recent-cards" *ngIf="recentPublications().length; else noRecent">
+          <article class="pet-card" *ngFor="let item of recentPublications(); trackBy: trackByPublicationId">
+            <div class="pet-media">
+              <img
+                [src]="item.publication.mascota?.fotoUrl || 'pet-placeholder.svg'"
+                [alt]="'Imagen de ' + (item.publication.mascota?.nombre ?? 'la publicación')"
+              >
+            </div>
+            <div class="pet-info">
+              <h3>{{ formatPetStatus(item.publication.mascota?.estado) }}</h3>
+              <div class="pet-badges">
+                <span class="pill pill-status">{{ formatPetStatus(item.publication.mascota?.estado) }}</span>
+                <span class="pill">{{ formatLabel(item.publication.mascota?.tipo) }}</span>
+              </div>
+              <p class="pet-desc">{{ item.publication.descripcion }}</p>
+              <div class="meta-grid">
+                <div class="meta-card">
+                  <span class="meta-label">Ciudad</span>
+                  <strong>{{ item.publication.ciudad || 'Sin datos' }}</strong>
+                </div>
+                <div class="meta-card">
+                  <span class="meta-label">Barrio</span>
+                  <strong>{{ item.publication.barrio || 'Sin datos' }}</strong>
+                </div>
+                <div class="meta-card full">
+                  <span class="meta-label">Fecha</span>
+                  <strong>{{ formatDate(item.publication.fecha) }}</strong>
+                </div>
+              </div>
+              <div class="pet-actions">
+                <button type="button" (click)="viewRecentDetail(item)">Ver detalles</button>
+              </div>
+            </div>
+          </article>
+        </div>
+        <ng-template #noRecent>
+          <div class="recent-state">Todavía no hay publicaciones recientes.</div>
+        </ng-template>
+      </ng-container>
+    </article>
+    <!-- Mapa con reportes cercanos para usuarios logueados -->
+    <article class="highlight-card" *ngIf="isLoggedIn()">
+      <h2>Mascotas perdidas en tu zona</h2>
+      <p>Explorá los reportes recientes en tu zona.</p>
+      <div *ngIf="zoneLoading()" class="zone-state">Cargando mapa…</div>
+      <div *ngIf="!zoneLoading() && zoneError()" class="zone-state error">{{ zoneError() }}</div>
+      <ng-container *ngIf="!zoneLoading() && !zoneError()">
+        <div class="zone-map-wrapper" *ngIf="zoneReports().length; else noZoneReports">
+          <div #zoneMap class="zone-map" aria-label="Mapa de mascotas perdidas cerca"></div>
+        </div>
+      </ng-container>
+    </article>
+    <ng-template #noZoneReports>
+      <p class="zone-state">No encontramos reportes recientes cerca tuyo.</p>
+    </ng-template>
+    <article class="highlight-card ranking-card">
+      <div class="ranking-header">
+        <div>
+          <h2>Ranking de usuarios</h2>
+          <p>Top 6 perfiles con más puntos por colaboraciones.</p>
+        </div>
+      </div>
+      <div *ngIf="rankingLoading()" class="ranking-state">Cargando ranking…</div>
+      <div *ngIf="!rankingLoading() && rankingError()" class="ranking-state error">{{ rankingError() }}</div>
+      <div *ngIf="!rankingLoading() && !rankingError()" class="ranking-table-wrapper">
+        <table class="ranking-table">
+          <thead>
+            <tr>
+              <th>Ranking</th>
+              <th>Nombre</th>
+              <th>Ciudad</th>
+              <th>Barrio</th>
+              <th>Puntos</th>
+              <th>Insignia</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let user of topUsers(); index as idx">
+              <td>{{ idx + 1 }}</td>
+              <td class="user-name">{{ user.nombre }} {{ user.apellido }}</td>
+              <td>{{ user.ciudad }}</td>
+              <td>{{ user.barrio }}</td>
+              <td>{{ user.puntos }}</td>
+              <td>
+                <ng-container *ngIf="user.badges?.length; else noBadgesRank">
+                  <span class="badge-chip" *ngFor="let badge of user.badges">{{ formatBadgeLabel(badge) }}</span>
+                </ng-container>
+                <ng-template #noBadgesRank>
+                  <span class="badge-chip">Sin insignias</span>
+                </ng-template>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div *ngIf="!rankingLoading() && !rankingError() && !topUsers().length" class="ranking-state">
+        Aún no hay usuarios en el ranking.
+      </div>
+    </article>
+  </div>
+
+  <div class="feature-grid">
+    <article class="feature-card">
+      <h3>Búsqueda por zonas</h3>
+      <p>Usá el mapa interactivo para explorar reportes y localizar mascotas perdidas por barrio.</p>
+    </article>
+    <article class="feature-card">
+      <h3>Perfiles verificados</h3>
+      <p>Usuarios identificados para dar mayor confianza a cada reporte publicado.</p>
+    </article>
+    <article class="feature-card">
+      <h3>Red solidaria</h3>
+      <p>Sumate a vecinxs y organizaciones que colaboran activamente en la búsqueda.</p>
+    </article>
+  </div>
+</section>
+
+<div class="auth-overlay" *ngIf="showLoginPrompt()">
+  <div class="auth-dialog">
+    <h2>Necesitás iniciar sesión</h2>
+    <p>Para crear una publicación debés iniciar sesión primero.</p>
+    <div class="auth-actions">
+      <button type="button" class="outline" (click)="cancelPrompt()">Cancelar</button>
+      <button type="button" class="primary" (click)="goToLogin()">Iniciar sesión</button>
+    </div>
+  </div>
+</div>

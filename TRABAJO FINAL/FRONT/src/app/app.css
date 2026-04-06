@@ -1,0 +1,117 @@
+:host {
+  font-family: "Roboto", Arial, Helvetica, sans-serif;
+  color: #121212;
+  background-color: transparent;
+  min-height: 100vh;
+  display: block;
+}
+
+body,
+main {
+  margin: 0;
+}
+
+.main-header {
+  width: 100%;
+  padding: 24px 32px;
+  box-sizing: border-box;
+}
+
+.header-bar {
+  background-color: #fdfdfb;
+  border-radius: 26px;
+  padding: 18px 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 32px;
+  box-shadow: 0 22px 55px rgba(0, 0, 0, 0.08);
+}
+
+.identity {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.logo-badge {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background-color: #148851;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer; 
+  color: #fdfdfb;
+  box-shadow: 0 10px 20px rgba(20, 136, 81, 0.35);
+}
+
+.header-copy {
+  display: flex;
+  flex-direction: column;
+}
+
+.header-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.headline {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+  color: #3a3a3a;
+}
+
+.subline {
+  color: #3a3a3a;
+  font-size: 14px;
+}
+
+.main-nav {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  font-size: 15px;
+}
+
+.main-nav .nav-link {
+  color: #2d3a32;
+  text-decoration: none;
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-weight: 600;
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+.main-nav .nav-link:hover,
+.main-nav .nav-link:focus,
+.main-nav .nav-link.active {
+  color: #148851;
+  border-color: rgba(20, 136, 81, 0.25);
+  background: rgba(20, 136, 81, 0.08);
+}
+
+.main-nav .cta-link {
+  text-decoration: none;
+  color: #fff;
+  background: linear-gradient(135deg, #148851, #0f6f42);
+  border-radius: 999px;
+  padding: 10px 26px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 10px 22px rgba(20, 136, 81, 0.3);
+}
+
+.content {
+  padding: 32px;
+  box-sizing: border-box;
+}
+

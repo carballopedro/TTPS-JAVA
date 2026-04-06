@@ -1,0 +1,176 @@
+<ng-container *ngIf="publication as detail">
+  <main class="detalle-wrapper">
+    <article class="detalle-card">
+      <header class="detail-header">
+        <div class="title-block">
+          <p class="eyebrow">Publicación del usuario</p>
+          <h1 class="pet-title">{{ detail.mascota?.nombre ?? 'Mascota sin nombre' }}</h1>
+          <p class="meta">{{ detail.descripcion || 'Sin descripción proporcionada.' }}</p>
+          <div class="status-row">
+            <span class="status-pill muted" *ngIf="formatPetStatus(detail.mascota?.estado) as petStatus">
+              {{ petStatus }}
+            </span>
+          </div>
+          <p class="report-info">
+            Reportada el {{ formatDate(detail.fecha) }} en {{ detail.ciudad || 'Ciudad no especificada' }},
+            {{ detail.barrio || 'Barrio no especificado' }}.
+          </p>
+        </div>
+        <figure class="pet-photo">
+          <img [src]="detail.mascota?.fotoUrl || defaultImage" [alt]="detail.mascota?.nombre ?? 'Mascota sin nombre'">
+        </figure>
+      </header>
+
+      <section class="detail-content">
+        <div class="info-stack">
+          <h2>Información del reporte</h2>
+          <dl class="info-grid">
+            <div>
+              <dt>Ciudad</dt>
+              <dd>{{ detail.ciudad || 'Sin datos' }}</dd>
+            </div>
+            <div>
+              <dt>Barrio</dt>
+              <dd>{{ detail.barrio || 'Sin datos' }}</dd>
+            </div>
+            <div>
+              <dt>Fecha</dt>
+              <dd>{{ formatDate(detail.fecha) }}</dd>
+            </div>
+          </dl>
+        </div>
+
+        <section class="pet-section" *ngIf="detail.mascota as pet">
+          <h2>Datos de la mascota</h2>
+          <dl class="info-grid">
+            <div>
+              <dt>Color</dt>
+              <dd>{{ formatLabel(pet.color) }}</dd>
+            </div>
+            <div>
+              <dt>Tipo</dt>
+              <dd>{{ formatLabel(pet.tipo) }}</dd>
+            </div>
+            <div>
+              <dt>Tamaño</dt>
+              <dd>{{ formatLabel(pet.tamanio) }}</dd>
+            </div>
+            <div>
+              <dt>Raza</dt>
+              <dd>{{ formatLabel(pet.raza) }}</dd>
+            </div>
+          </dl>
+        </section>
+
+        <section class="map-section" *ngIf="detail.latitud != null && detail.longitud != null">
+          <div class="map-header">
+            <p class="map-eyebrow">Ubicación aproximada</p>
+          </div>
+          <div class="map-card">
+            <div class="map-container" #detailMap aria-label="Mapa de la ubicación reportada"></div>
+          </div>
+        </section>
+      </section>
+
+      <div class="detail-actions">
+        <!-- Botón para entrar al modo edición (solo propietarios) -->
+        <button
+          *ngIf="canDelete() && !isEditing"
+          type="button"
+          class="primary"
+          (click)="startEditing()"
+        >
+          Editar publicación
+        </button>
+        <!-- Botones contextuales para adoptar o recuperar según estado -->
+        <button *ngIf="shouldShowRecoverButton()" type="button" class="primary" (click)="openRecoverPrompt()">
+          Recuperar
+        </button>
+        <button *ngIf="shouldShowAdoptButton()" type="button" class="primary" (click)="openAdoptPrompt()">
+          Adoptar
+        </button>
+        <button
+          *ngIf="canDelete()"
+          type="button"
+          class="danger-link"
+          (click)="openDeletePrompt()"
+        >
+          Eliminar publicación
+        </button>
+        <a [routerLink]="backRoute" class="back-link">{{ backLabel }}</a>
+      </div>
+
+      <!-- Formulario de edición para propietarios de la publicación -->
+      <section class="edit-section" *ngIf="isEditing">
+        <form class="edit-form" [formGroup]="editForm" (ngSubmit)="submitEdit()">
+          <h2>Editar publicación</h2>
+          <p class="report-info">Solo se puede modificar la descripción y el nombre de la mascota.</p>
+
+          <div class="edit-grid">
+            <label class="edit-field">
+              <span>Descripción</span>
+              <textarea formControlName="description" rows="3"></textarea>
+              <small *ngIf="isFieldInvalid('description')">Este campo es obligatorio.</small>
+            </label>
+            <label class="edit-field">
+              <span>Nombre de la mascota</span>
+              <input type="text" formControlName="petName">
+              <small *ngIf="isFieldInvalid('petName')">Este campo es obligatorio.</small>
+            </label>
+          </div>
+          <p class="edit-error" *ngIf="saveError">{{ saveError }}</p>
+          <div class="edit-actions">
+            <button type="button" class="outline" (click)="cancelEditing()" [disabled]="isSaving">Cancelar</button>
+            <button type="submit" class="primary" [disabled]="isSaving">
+              {{ isSaving ? 'Guardando…' : 'Guardar cambios' }}
+            </button>
+          </div>
+        </form>
+      </section>
+    </article>
+  </main>
+</ng-container>
+
+<div class="delete-overlay" *ngIf="deletePromptVisible || adoptionPromptVisible || recoveryPromptVisible || stateChangeSuccessMessage">
+  <div class="delete-dialog">
+    <ng-container *ngIf="stateChangeSuccessMessage; else actionPrompts">
+      <h2>Estado actualizado</h2>
+      <p>{{ stateChangeSuccessMessage }}</p>
+      <div class="delete-actions">
+        <button type="button" class="primary" (click)="confirmStateSuccess()">OK</button>
+      </div>
+    </ng-container>
+    <ng-template #actionPrompts>
+      <ng-container *ngIf="deletePromptVisible; else statePrompt">
+        <h2>Eliminar publicación</h2>
+        <p>¿Estás seguro de que querés eliminar este reporte? Esta acción no se puede deshacer.</p>
+        <p class="delete-error" *ngIf="deleteError">{{ deleteError }}</p>
+        <div class="delete-actions">
+          <button type="button" class="outline" (click)="cancelDeletePrompt()" [disabled]="isDeleting">Cancelar</button>
+        <button type="button" class="danger" (click)="confirmDelete()" [disabled]="isDeleting">
+          {{ isDeleting ? 'Eliminando…' : 'Eliminar' }}
+        </button>
+          </div>
+        </ng-container>
+      <ng-template #statePrompt>
+        <h2>{{ adoptionPromptVisible ? 'Adoptar mascota' : 'Recuperar mascota' }}</h2>
+        <p>
+          {{ adoptionPromptVisible ? '¿Seguro que querés adoptar esta mascota?'
+            : '¿Seguro que querés marcar como recuperada esta publicación?' }}
+        </p>
+        <p class="delete-error" *ngIf="stateChangeError">{{ stateChangeError }}</p>
+        <div class="delete-actions">
+          <button type="button" class="outline" (click)="cancelStatePrompt()" [disabled]="isUpdatingState">Cancelar</button>
+          <button
+            type="button"
+            class="primary"
+            (click)="adoptionPromptVisible ? confirmAdopt() : confirmRecover()"
+            [disabled]="isUpdatingState"
+          >
+            {{ isUpdatingState ? 'Actualizando…' : (adoptionPromptVisible ? 'Adoptar' : 'Recuperar') }}
+          </button>
+        </div>
+      </ng-template>
+    </ng-template>
+  </div>
+</div>

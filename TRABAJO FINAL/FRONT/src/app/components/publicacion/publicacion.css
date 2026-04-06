@@ -1,0 +1,246 @@
+:host {
+  display: block;
+  padding: clamp(4px, 2vw, 16px) clamp(20px, 4vw, 40px);
+  font-family: "Roboto", Arial, Helvetica, sans-serif;
+  color: #0f1d16;
+}
+
+.publication-page {
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.publication-card {
+  background: #fdfdfb;
+  border-radius: 28px;
+  padding: clamp(28px, 5vw, 48px);
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.publication-copy .eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 13px;
+  color: #148851;
+  margin: 0 0 8px;
+}
+
+.publication-copy h1 {
+  margin: 0 0 10px;
+  font-size: clamp(28px, 4vw, 40px);
+}
+
+.publication-copy p {
+  margin: 0;
+  color: #4c5e50;
+}
+
+.publication-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-weight: 600;
+  color: #2d3a32;
+  font-size: 14px;
+}
+
+input,
+textarea,
+select {
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 14px;
+  padding: 12px 14px;
+  font: inherit;
+  background: #fff;
+  font-weight: 400;
+  color: #0f1d16;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #999;
+}
+
+select:required:invalid {
+  color: #999;
+}
+
+.publication-form input[readonly] {
+  background: #f5f7f6;
+  color: #5f5f5f;
+  border-color: #e1e1e1;
+  cursor: not-allowed;
+}
+
+.publication-form input[readonly]:focus {
+  border-color: #d4d4d4;
+  box-shadow: none;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.field-pair {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+}
+
+.field-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 18px;
+}
+
+.map-section {
+  background: #f3fdf7;
+  border-radius: 18px;
+  padding: 18px;
+  border: 1px solid rgba(20, 136, 81, 0.25);
+}
+
+.map-instructions {
+  margin: 0 0 12px;
+  font-weight: 600;
+  color: #148851;
+}
+
+.publication-map {
+  width: 100%;
+  height: 300px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.map-hint {
+  margin: 12px 0 0;
+  font-size: 13px;
+  color: #4c5e50;
+}
+
+.map-error {
+  margin: 10px 0 0;
+  color: #c0392b;
+  font-weight: 600;
+}
+
+.upload-field .file-input {
+  border: 2px dashed rgba(20, 136, 81, 0.35);
+  border-radius: 16px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #148851;
+  font-weight: 600;
+  position: relative;
+}
+
+.upload-field input[type="file"] {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+button[type="submit"] {
+  align-self: flex-start;
+  background: linear-gradient(135deg, #148851, #0f6f42);
+  border: none;
+  color: #fff;
+  font-weight: 600;
+  font-size: 16px;
+  border-radius: 16px;
+  padding: 14px 26px;
+  cursor: pointer;
+  box-shadow: 0 16px 32px rgba(20, 136, 81, 0.35);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+button[type="submit"]:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 20px 36px rgba(20, 136, 81, 0.35);
+}
+
+@media (max-width: 640px) {
+  .publication-card {
+    padding: 24px;
+  }
+
+  button[type="submit"] {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* Overlay reutilizado para mostrar el mensaje de publicación exitosa */
+.delete-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 29, 22, 0.4);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 1000;
+}
+
+.delete-dialog {
+  width: 100%;
+  max-width: 420px;
+  background: #fdfdfb;
+  border-radius: 32px;
+  padding: 36px 32px;
+  text-align: center;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 45px 85px rgba(0, 0, 0, 0.2);
+}
+
+.delete-dialog h2 {
+  margin: 0 0 16px;
+  font-size: 26px;
+  color: #2d3a32;
+}
+
+.delete-dialog p {
+  margin: 0 0 24px;
+  color: #4a5950;
+  line-height: 1.6;
+}
+
+.delete-actions {
+  display: flex;
+  gap: 14px;
+}
+
+.delete-actions button {
+  flex: 1;
+  border-radius: 999px;
+  padding: 14px 0;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  background: linear-gradient(135deg, #148851, #0f6f42);
+  color: #fff;
+  box-shadow: 0 12px 24px rgba(20, 136, 81, 0.3);
+}
+
+.delete-actions button:hover {
+  transform: translateY(-1px);
+}

@@ -1,0 +1,89 @@
+<section class="login-page">
+  <div class="login-card">
+    <a class="card-home" href="/" aria-label="Volver al inicio">
+      <span class="card-home-icon" aria-hidden="true">←</span>
+      Inicio
+    </a>
+    <div class="login-copy">
+      <p class="eyebrow">Ingresá a tu cuenta</p>
+      <h1>Bienvenido de nuevo</h1>
+      <p>
+        Encontrá y compartí reportes de mascotas perdidas con una cuenta segura.
+        Iniciá sesión para continuar con tu búsqueda.
+      </p>
+    </div>
+
+    <form #loginFormElement class="login-form" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <label class="input-field">
+        <span>Email</span>
+        <div class="input-wrapper has-right-icon">
+          <input
+            type="email"
+            formControlName="email"
+            placeholder="nombre@correo.com"
+            required
+            pattern="^[^\s@]+@[^\s@]+\.[^\s@]+$"
+          >
+          <span class="input-icon icon-right" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="4" width="20" height="16" rx="2" ry="2"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+          </span>
+        </div>
+      </label>
+
+      <label class="input-field">
+        <span>Contraseña</span>
+        <div class="input-wrapper has-action">
+          <input
+            [type]="isPasswordVisible ? 'text' : 'password'"
+            formControlName="password"
+            placeholder="••••••••"
+            required
+            autocomplete="current-password"
+          >
+          <button
+            type="button"
+            class="input-action"
+            [attr.aria-pressed]="isPasswordVisible"
+            [attr.aria-label]="isPasswordVisible ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+            (click)="togglePasswordVisibility()"
+          >
+            <ng-container *ngIf="isPasswordVisible; else showPasswordIcon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.77 21.77 0 0 1 5.06-6.94"/>
+                <path d="M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a21.82 21.82 0 0 1-2.11 3.95"/>
+                <line x1="1" y1="1" x2="23" y2="23"/>
+              </svg>
+            </ng-container>
+            <ng-template #showPasswordIcon>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </ng-template>
+          </button>
+        </div>
+      </label>
+
+      <div class="form-row">
+        <label class="remember">
+          <input type="checkbox" formControlName="remember">
+          Recordarme
+        </label>
+        <!-- <a class="link" href="#">¿Olvidaste tu contraseña?</a> -->
+      </div>
+
+      <button type="submit" [disabled]="isSubmitting">Ingresar</button>
+
+      <p class="form-error" *ngIf="serverError">{{ serverError }}</p>
+
+      <p class="register-hint">
+        ¿Todavía no tenés cuenta?
+        <a class="link" href="/register">Crear una ahora</a>
+      </p>
+    </form>
+
+  </div>
+</section>

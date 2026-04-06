@@ -1,0 +1,124 @@
+<section class="register-page">
+  <div class="register-card">
+    <a class="card-home" href="/" aria-label="Volver al inicio">
+      <span class="card-home-icon" aria-hidden="true">←</span>
+      Inicio
+    </a>
+
+    <div class="register-copy">
+      <p class="eyebrow">Crear una cuenta</p>
+      <h1>Sumate a la comunidad</h1>
+      <p>
+        Completá tus datos para empezar a publicar reportes y ayudar a reunir mascotas con sus familias.
+      </p>
+    </div>
+
+    <form #registerFormElement class="register-form" [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+
+      <div class="field-pair">
+        <label>
+          Nombre
+          <input type="text" placeholder="Juan" formControlName="firstName" required>
+        </label>
+        <label>
+          Apellido
+          <input type="text" placeholder="Pérez" formControlName="lastName" required>
+        </label>
+      </div>
+
+      <label>
+        Email
+        <div class="input-wrapper has-right-icon">
+          <input type="email" placeholder="usuario@correo.com" formControlName="email" required>
+          <span class="input-icon icon-right" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="4" width="20" height="16" rx="2" ry="2"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+          </span>
+        </div>
+      </label>
+
+      <label>
+        Contraseña
+        <div class="input-wrapper has-action">
+          <input
+            [type]="isPasswordVisible ? 'text' : 'password'"
+            placeholder="••••••••"
+            required
+            autocomplete="current-password"
+            formControlName="password"
+          >
+          <button
+            type="button"
+            class="input-action"
+            [attr.aria-pressed]="isPasswordVisible"
+            [attr.aria-label]="isPasswordVisible ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+            (click)="togglePasswordVisibility()"
+          >
+            <ng-container *ngIf="isPasswordVisible; else showPasswordIcon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a21.77 21.77 0 0 1 5.06-6.94"/>
+                <path d="M9.9 4.24A10.94 10.94 0 0 1 12 4c7 0 11 8 11 8a21.82 21.82 0 0 1-2.11 3.95"/>
+                <line x1="1" y1="1" x2="23" y2="23"/>
+              </svg>
+            </ng-container>
+            <ng-template #showPasswordIcon>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </ng-template>
+          </button>
+        </div>
+      </label>
+
+            <div class="map-section">
+        <p class="map-instructions">Elegí tu ubicación en el mapa para completar Ciudad y Barrio.</p>
+        <div id="register-map" class="register-map" aria-label="Mapa para seleccionar ubicación"></div>
+        <p class="map-hint" [class.loading]="isGeocoding">
+          <ng-container *ngIf="isGeocoding; else idleHint">Obteniendo datos de la zona…</ng-container>
+          <ng-template #idleHint>Hacé clic en el mapa para fijar el punto.</ng-template>
+        </p>
+        <p *ngIf="geoError" class="map-error" role="alert">{{ geoError }}</p>
+      </div>
+
+      <div class="field-pair">
+        <label>
+          Ciudad
+          <input
+            type="text"
+            placeholder="La Plata"
+            formControlName="city"
+            readonly
+            required
+            aria-live="polite"
+          >
+        </label>
+        <label>
+          Barrio
+          <input
+            type="text"
+            placeholder="Centro"
+            formControlName="neighborhood"
+            readonly
+            required
+            aria-live="polite"
+          >
+        </label>
+      </div>
+
+      <label class="full-width">
+        Teléfono
+        <input type="tel" placeholder="221-555-1234" formControlName="phone" required>
+      </label>
+
+      <button type="submit">Registrarse</button>
+
+      <p class="login-hint">
+      ¿Ya tenés cuenta?
+      <a class="link" href="/login">Iniciar sesión</a>
+    </p>
+    </form>
+  </div>
+</section>

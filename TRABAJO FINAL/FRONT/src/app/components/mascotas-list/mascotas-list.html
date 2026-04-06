@@ -1,0 +1,143 @@
+<section class="mascotas-wrapper">
+  <header class="page-heading">
+    <div>
+      <p class="eyebrow">Mascotas reportadas</p>
+      <h1>Buscá por zona y ayudá en la búsqueda</h1>
+      <p>Explorá los reportes activos y filtrá por barrio o tipo de mascota para compartir información útil.</p>
+    </div>
+    <div class="filters">
+      <label class="filter-control wide" for="filterTerm">
+        <span class="filter-label">Buscar</span>
+        <input
+          id="filterTerm"
+          type="search"
+          [(ngModel)]="filterTerm"
+          (ngModelChange)="applyFilters()"
+          placeholder="Ciudad, barrio o datos de la mascota"
+        >
+      </label>
+      <label class="filter-control" for="filterType">
+        <span class="filter-label">Tipo</span>
+        <select
+          id="filterType"
+          [(ngModel)]="filterType"
+          (ngModelChange)="applyFilters()"
+        >
+          <option value="todos">Todos los tipos</option>
+          <option value="perro">Perros</option>
+          <option value="gato">Gatos</option>
+          <option value="otro">Otro</option>
+        </select>
+      </label>
+      <label class="filter-control" for="filterStatus">
+        <span class="filter-label">Estado</span>
+        <select
+          id="filterStatus"
+          [(ngModel)]="filterStatus"
+          (ngModelChange)="applyFilters()"
+        >
+          <option value="todos">Todos</option>
+          <option value="perdido">Perdidos</option>
+          <option value="encontrado">Encontrados</option>
+        </select>
+      </label>
+      <label class="filter-control" for="sortBy">
+        <span class="filter-label">Ordenar por</span>
+        <select
+          id="sortBy"
+          [(ngModel)]="sortBy"
+          (ngModelChange)="applyFilters()"
+        >
+          <option value="fecha">Fecha</option>
+          <option value="nombre">Nombre</option>
+        </select>
+      </label>
+      <label class="filter-control" for="sortDirection">
+        <span class="filter-label">Orden</span>
+        <select
+          id="sortDirection"
+          [(ngModel)]="sortDirection"
+          (ngModelChange)="applyFilters()"
+        >
+          <option value="desc">Descendente</option>
+          <option value="asc">Ascendente</option>
+        </select>
+      </label>
+      <!-- Botón para alternar entre lista y mapa -->
+      <label class="filter-control view-toggle">
+        <span class="filter-label">Vista</span>
+        <div class="checkbox-toggle">
+          <input
+            type="checkbox"
+            id="viewMapToggle"
+            [checked]="showMap"
+            (change)="toggleResultsView()"
+          >
+          <label for="viewMapToggle">{{ showMap ? 'Ver en tarjetas' : 'Ver en mapa' }}</label>
+        </div>
+      </label>
+      <div class="filter-control action-control">
+        <span class="filter-label">Acción</span>
+        <button type="button" class="clear-filters" (click)="clearFilters()">Limpiar filtros</button>
+      </div>
+    </div>
+  </header>
+
+  <div *ngIf="isLoading" class="state-card loading">
+    <p>Estamos cargando los reportes...</p>
+  </div>
+
+  <div *ngIf="!isLoading && loadError" class="state-card error">
+    <p>{{ loadError }}</p>
+    <button type="button" class="clear-filters" (click)="reload()">Reintentar</button>
+  </div>
+
+  <ng-container *ngIf="!isLoading && !loadError">
+    <!-- Contenedor del mapa cuando la vista está activa -->
+    <div *ngIf="showMap" class="map-results">
+      <div class="map-container" #resultsMap aria-label="Mapa con publicaciones"></div>
+    </div>
+    <div class="cards-grid" *ngIf="!showMap && filteredReports.length; else emptyState">
+      <article class="pet-card" *ngFor="let item of filteredReports; trackBy: trackById">
+        <div class="pet-media">
+          <img
+            [src]="item.publication.mascota?.fotoUrl || defaultImage"
+            [alt]="'Imagen de ' + (item.publication.mascota?.nombre ?? 'la publicación')"
+          >
+        </div>
+        <div class="pet-info">
+          <h3>{{ item.publication.mascota?.nombre ?? 'Publicación #' + item.publication.id }}</h3>
+          <div class="pet-badges">
+            <span class="pill pill-status">{{ formatPetStatus(item.publication.mascota?.estado) }}</span>
+            <span class="pill">{{ formatLabel(item.publication.mascota?.tipo) }}</span>
+          </div>
+          <p class="pet-desc">{{ item.publication.descripcion }}</p>
+          <div class="meta-grid">
+            <div class="meta-card">
+              <span class="meta-label">Ciudad</span>
+              <strong>{{ item.publication.ciudad || 'Sin datos' }}</strong>
+            </div>
+            <div class="meta-card">
+              <span class="meta-label">Barrio</span>
+              <strong>{{ item.publication.barrio || 'Sin datos' }}</strong>
+            </div>
+            <div class="meta-card full">
+              <span class="meta-label">Fecha</span>
+              <strong>{{ formatDate(item.publication.fecha) }}</strong>
+            </div>
+          </div>
+          <div class="pet-actions">
+            <button type="button" (click)="viewDetails(item)">Ver detalles</button>
+          </div>
+        </div>
+      </article>
+    </div>
+  </ng-container>
+
+  <ng-template #emptyState>
+    <div class="empty-state" *ngIf="!showMap">
+      <p>No encontramos reportes con esos filtros.</p>
+      <button type="button" class="clear-filters" (click)="clearFilters()">Limpiar filtros</button>
+    </div>
+  </ng-template>
+</section>

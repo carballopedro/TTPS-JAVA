@@ -1,0 +1,47 @@
+<header class="main-header">
+  <div class="header-bar">
+    <div class="identity">
+      <div class="logo-badge" aria-hidden="true" routerLink="/">🐾</div>
+      <div class="header-copy">
+        <p class="headline">¿Dónde estás? Volvé a casa</p>
+        <span class="subline">Plataforma para encontrar mascotas perdidas</span>
+      </div>
+    </div>
+    <nav class="main-nav">
+      <a routerLink="/" routerLinkActive="active" class="nav-link">Inicio</a>
+      <a routerLink="/mascotas" routerLinkActive="active" class="nav-link">Mascotas</a>
+      <ng-container *ngIf="isLoggedIn(); else loginLink">
+        <div class="account-menu">
+          <button
+            type="button"
+            class="account-btn"
+            (click)="toggleMenu()"
+            [attr.aria-expanded]="isMenuOpen()"
+          >
+            <span>Mi cuenta</span>
+            <span class="chevron" [class.open]="isMenuOpen()"></span>
+          </button>
+          <div class="menu-panel" *ngIf="isMenuOpen()">
+            <a routerLink="/perfil" class="menu-item" (click)="closeMenu()">Ver perfil</a>
+            <a routerLink="/mis-publicaciones" class="menu-item" (click)="closeMenu()">Mis publicaciones</a>
+            <button type="button" class="menu-item" (click)="openConfirm()">Cerrar sesión</button>
+          </div>
+        </div>
+      </ng-container>
+      <ng-template #loginLink>
+        <a routerLink="/login" class="cta-link">Ingresar</a>
+      </ng-template>
+    </nav>
+  </div>
+</header>
+
+<div class="logout-overlay" *ngIf="isConfirmOpen()">
+  <div class="logout-dialog">
+    <h2>Cerrar sesión</h2>
+    <p>¿Seguro que querés cerrar sesión? Perderás el acceso hasta volver a iniciar.</p>
+    <div class="logout-actions">
+      <button type="button" class="outline" (click)="cancelLogout()">Cancelar</button>
+      <button type="button" class="danger" (click)="confirmLogout()">Salir</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,144 @@
+<ng-container *ngIf="detail as data">
+  <main class="detalle-wrapper">
+    <article class="detalle-card">
+      <header class="detail-header">
+        <div class="title-block">
+          <p class="eyebrow">Reporte público</p>
+          <h1 class="pet-title">{{ data.publication.mascota?.nombre ?? 'Mascota sin nombre' }}</h1>
+          <p class="meta">{{ data.publication.descripcion || 'Sin descripción proporcionada.' }}</p>
+          <div class="status-row">
+            <span class="status-pill muted" *ngIf="formatPetStatus(data.publication.mascota?.estado) as petStatus">
+              {{ petStatus }}
+            </span>
+          </div>
+          <p class="report-info">
+            Reportada el {{ formatDate(data.publication.fecha) }} en {{ data.publication.ciudad || 'Ciudad no especificada' }},
+            {{ data.publication.barrio || 'Barrio no especificado' }}.
+          </p>
+        </div>
+        <figure class="pet-photo">
+          <img
+            [src]="data.publication.mascota?.fotoUrl || defaultImage"
+            [alt]="data.publication.mascota?.nombre ?? 'Mascota sin nombre'"
+          >
+        </figure>
+      </header>
+
+      <section class="detail-content">
+        <div class="info-stack">
+          <h2>Información del reporte</h2>
+          <dl class="info-grid">
+            <div>
+              <dt>Ciudad</dt>
+              <dd>{{ data.publication.ciudad || 'Sin datos' }}</dd>
+            </div>
+            <div>
+              <dt>Barrio</dt>
+              <dd>{{ data.publication.barrio || 'Sin datos' }}</dd>
+            </div>
+            <div>
+              <dt>Fecha</dt>
+              <dd>{{ formatDate(data.publication.fecha) }}</dd>
+            </div>
+          </dl>
+        </div>
+
+        <section class="pet-section" *ngIf="data.publication.mascota as pet">
+          <h2>Datos de la mascota</h2>
+          <dl class="info-grid">
+            <div>
+              <dt>Color</dt>
+              <dd>{{ formatLabel(pet.color) }}</dd>
+            </div>
+            <div>
+              <dt>Tipo</dt>
+              <dd>{{ formatLabel(pet.tipo) }}</dd>
+            </div>
+            <div>
+              <dt>Tamaño</dt>
+              <dd>{{ formatLabel(pet.tamanio) }}</dd>
+            </div>
+            <div>
+              <dt>Raza</dt>
+              <dd>{{ formatLabel(pet.raza) }}</dd>
+            </div>
+          </dl>
+        </section>
+
+        <section class="creator-section">
+          <h2>Datos del creador</h2>
+          <dl class="info-grid">
+            <div>
+              <dt>Nombre</dt>
+              <dd>{{ data.creator.nombre || 'Sin datos' }}</dd>
+            </div>
+            <div>
+              <dt>Apellido</dt>
+              <dd>{{ data.creator.apellido || 'Sin datos' }}</dd>
+            </div>
+            <div>
+              <dt>Email</dt>
+              <dd>{{ data.creator.email || 'Sin datos' }}</dd>
+            </div>
+            <div>
+              <dt>Teléfono</dt>
+              <dd>{{ data.creator.telefono || 'Sin datos' }}</dd>
+            </div>
+          </dl>
+        </section>
+
+        <section class="map-section" *ngIf="data.publication.latitud != null && data.publication.longitud != null">
+          <div class="map-header">
+            <p class="map-eyebrow">Ubicación aproximada</p>
+          </div>
+          <div class="map-card">
+            <div class="map-container" #detailMap aria-label="Mapa de la ubicación reportada"></div>
+          </div>
+        </section>
+      </section>
+
+      <div class="detail-actions">
+        <!-- Botón de adopción visible para usuarios logueados cuando aplica -->
+        <button *ngIf="shouldShowAdoptButton()" type="button" class="primary" (click)="openAdoptPrompt()">
+          Adoptar
+        </button>
+        <button *ngIf="shouldShowRecoverButton()" type="button" class="primary" (click)="openRecoverPrompt()">
+          Recuperar
+        </button>
+        <a [routerLink]="backRoute" class="back-link">{{ backLabel }}</a>
+      </div>
+    </article>
+  </main>
+</ng-container>
+
+<div class="state-overlay" *ngIf="adoptionPromptVisible || recoveryPromptVisible || stateChangeSuccessMessage">
+  <div class="state-dialog">
+    <ng-container *ngIf="stateChangeSuccessMessage; else confirmPrompt">
+      <h2>Estado actualizado</h2>
+      <p>{{ stateChangeSuccessMessage }}</p>
+      <div class="state-actions">
+        <button type="button" class="primary" (click)="confirmStateSuccess()">OK</button>
+      </div>
+    </ng-container>
+    <ng-template #confirmPrompt>
+      <h2>{{ adoptionPromptVisible ? 'Adoptar mascota' : 'Recuperar mascota' }}</h2>
+      <p>
+        {{ adoptionPromptVisible
+          ? '¿Seguro que querés adoptar esta mascota?'
+          : '¿Seguro que querés recuperar esta mascota?' }}
+      </p>
+      <p class="state-error" *ngIf="stateChangeError">{{ stateChangeError }}</p>
+      <div class="state-actions">
+        <button type="button" class="outline" (click)="cancelStatePrompt()" [disabled]="isUpdatingState">Cancelar</button>
+        <button
+          type="button"
+          class="primary"
+          (click)="adoptionPromptVisible ? confirmAdopt() : confirmRecover()"
+          [disabled]="isUpdatingState"
+        >
+          {{ isUpdatingState ? 'Enviando…' : (adoptionPromptVisible ? 'Confirmar adopción' : 'Confirmar recuperación') }}
+        </button>
+      </div>
+    </ng-template>
+  </div>
+</div>
