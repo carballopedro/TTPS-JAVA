@@ -1,0 +1,18 @@
+<svg width="360" height="220" viewBox="0 0 360 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Imagen predeterminada de mascota">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e4f3eb"/>
+      <stop offset="100%" stop-color="#c4e0d1"/>
+    </linearGradient>
+  </defs>
+  <rect width="360" height="220" fill="url(#bg)" rx="24"/>
+  <g fill="none" stroke="#7ab893" stroke-width="4" stroke-linecap="round">
+    <path d="M110 128c0-24 20-44 44-44h52c24 0 44 20 44 44v32H110z"/>
+    <path d="M150 110c-8-8-28-14-32-34-2-12 4-26 18-26 14 0 19 12 22 20 3-8 8-20 22-20s20 14 18 26c-4 20-24 26-32 34"/>
+    <path d="M222 92c-6-12-2-30 12-34s22 8 20 20c-2 16-20 18-32 14z"/>
+    <path d="M138 92c6-12 2-30-12-34s-22 8-20 20c2 16 20 18 32 14z"/>
+  </g>
+  <circle cx="162" cy="140" r="6" fill="#2b4635"/>
+  <circle cx="198" cy="140" r="6" fill="#2b4635"/>
+  <path d="M172 162c8 6 18 6 26 0" stroke="#2b4635" stroke-width="4" stroke-linecap="round"/>
+</svg>
